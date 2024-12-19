@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean signup(SignUpForm form) {
+	public boolean signup(SignUpForm form) throws Exception {
 		// copy data from binding object to endtity object
 		UserDetails entity = new UserDetails();
 		BeanUtils.copyProperties(form, entity);
@@ -36,16 +36,13 @@ public class UserServiceImpl implements UserService {
 		entity.setPassword(tempPswd);
 		entity.setAccountStatus("LOCKED");
 		userDetailsRepository.save(entity);
-
-		String to = form.getEmail();
+//To send Email
+		String recipient = form.getEmail();
 		String subject = "Unlock Your Account";
-		String body = "<h1>Use below temporary password to unlock account</h1>" + "Temporary Pswd : TDqxx2<br/>"
-				+ "<a href=\"http://localhost:8080/unlock?email=" + to + "\">Click Here to Unlock Account</a>";
-
-		emailUtils.sendEmail(to, subject, body);
-		System.out.println("Email recipient: " + to);
-		System.out.println("Email subject: " + subject);
-		System.out.println("Email body: " + body);
+		String emailBody = "<h1>Use below temporary password to unlock account</h1>" + "Temporary Pswd : " + tempPswd
+				+ "<br/>" + "<a href=\"http://localhost:8080/unlock?email=" + recipient
+				+ "\">Click Here to Unlock Account</a>";
+		emailUtils.sendEmail(recipient, subject, emailBody);
 
 		return true;
 	}

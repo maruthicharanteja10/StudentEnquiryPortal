@@ -27,7 +27,7 @@ public class UserController {
 	}
 
 	@PostMapping("/signup")
-	public String handleSignup(@ModelAttribute("user") SignUpForm form, Model model) {
+	public String handleSignup(@ModelAttribute("user") SignUpForm form, Model model) throws Exception {
 		boolean status = userService.signup(form);
 		if (status) {
 			model.addAttribute("succMsg", "Check Your Email");
@@ -35,7 +35,6 @@ public class UserController {
 			model.addAttribute("errMsg", "Problem Occured");
 		}
 		return "signup";
-
 	}
 
 	@GetMapping("/forgot")

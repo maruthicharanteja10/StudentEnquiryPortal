@@ -7,25 +7,25 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
+import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 
 @Component
 public class EmailUtils {
-	@Autowired
-	private JavaMailSender mailSender;
+	private final JavaMailSender mailSender;
 
-	public boolean sendEmail(String subject, String body, String to) {
-		try {
-			MimeMessage mimeMessage = mailSender.createMimeMessage();
-			MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
-			helper.setSubject(subject);
-			helper.setText(body);
-			helper.setTo(to);
-			mailSender.send(mimeMessage);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	public EmailUtils(JavaMailSender mailSender) {
+		this.mailSender = mailSender;
+	}
 
-		return true;
+	public void sendEmail(String recipient, String subject, String emailBody) throws Exception {
+		MimeMessage mimeMessage = mailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+
+		helper.setTo(recipient); // Pass only the email address
+		helper.setSubject(subject);
+		helper.setText(emailBody, true); // Pass HTML content to setText()
+
+		mailSender.send(mimeMessage);
 	}
 }
