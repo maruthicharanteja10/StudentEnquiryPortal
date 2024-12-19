@@ -7,7 +7,7 @@ import com.springboot.projects.binding.UnlockForm;
 public interface UserService {
 	public String login(LoginForm form);
 
-	public String signup(SignUpForm form);
+	public boolean signup(SignUpForm form) ;
 
 	public String unlockaccount(UnlockForm form);
 

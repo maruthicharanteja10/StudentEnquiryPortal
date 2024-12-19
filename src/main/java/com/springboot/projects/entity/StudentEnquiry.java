@@ -22,6 +22,6 @@ public class StudentEnquiry {
 	private LocalDate createdDate;
 	private LocalDate updatedDate;
 	
-//	private UserDetails user_id;
+//private UserDetails user_id;
 	
 }

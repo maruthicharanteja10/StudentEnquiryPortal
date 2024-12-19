@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xlmns:th="www.thymleaf.org">
 
 <head>
 <meta charset="UTF-8" />
@@ -81,32 +81,33 @@
 											alt="logo">
 										<h4 class="mt-1 mb-5 pb-1"></h4>
 									</div>
-
-									<form>
+									<p th:text="${succMsg}" class="text-sucess">
+									<p th:text="${errMsg}" class="text-danger">
+									<form th:action="@{/signup}" th:object="${user}" method="POST">
 										<p>Please create account here</p>
 
 										<div class="form-outline mb-4">
-											<input type="email" id="form2Example11" class="form-control"
-												placeholder="Phone number or email address" /> <label
+											<input type="text" id="form2Example11" class="form-control"
+												placeholder="name" th:field="*{name}" /> <label
 												class="form-label" for="form2Example11">Name</label>
 										</div>
 
 										<div class="form-outline mb-4">
-											<input type="password" id="form2Example22"
-												class="form-control" /> <label class="form-label"
-												for="form2Example22">Email</label>
+											<input type="email" id="form2Example22" class="form-control"
+												placeholder="Email" th:field="*{email}" /> <label
+												class="form-label" for="form2Example22">Email</label>
 										</div>
 
 										<div class="form-outline mb-4">
-											<input type="password" id="form2Example22"
-												class="form-control" /> <label class="form-label"
-												for="form2Example22">Phno</label>
+											<input type="number" id="form2Example33" class="form-control"
+												placeholder="Phoneno" th:field="*{phoneno}" /> <label
+												class="form-label" for="form2Example22">Phno</label>
 										</div>
 
 										<div class="text-center pt-1 mb-5 pb-1">
-											<a href="unlock"
+											<input type="submit" value="Sign Up"
 												class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3"
-												type="button">Sign Up</a>
+												>
 										</div>
 
 										<div

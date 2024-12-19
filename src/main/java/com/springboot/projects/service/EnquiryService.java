@@ -16,4 +16,6 @@ public interface EnquiryService {
 	public String addEnquiry(EnquiryForm form);
 
 	public List<EnquiryForm> getEnquires(Integer UserId, EnquirySearchCriteria criteria);
+
+	public EnquiryForm getEnquiry(Integer enqId);
 }

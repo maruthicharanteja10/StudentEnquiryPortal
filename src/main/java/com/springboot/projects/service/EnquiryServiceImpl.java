@@ -33,4 +33,9 @@ public class EnquiryServiceImpl implements EnquiryService {
 		return null;
 	}
 
+	@Override
+	public EnquiryForm getEnquiry(Integer enqId) {
+		return null;
+	}
+
 }
