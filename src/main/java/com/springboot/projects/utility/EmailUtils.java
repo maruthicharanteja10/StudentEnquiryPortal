@@ -19,13 +19,21 @@ public class EmailUtils {
 	}
 
 	public void sendEmail(String recipient, String subject, String emailBody) throws Exception {
+		if (!isValidEmail(recipient)) {
+			throw new IllegalArgumentException("Invalid email address: " + recipient);
+		}
 		MimeMessage mimeMessage = mailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
 
-		helper.setTo(recipient); // Pass only the email address
+		helper.setTo(recipient); 
 		helper.setSubject(subject);
-		helper.setText(emailBody, true); // Pass HTML content to setText()
+		helper.setText(emailBody, true); 
 
 		mailSender.send(mimeMessage);
+	}
+
+	private boolean isValidEmail(String email) {
+		String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+		return email.matches(emailRegex);
 	}
 }

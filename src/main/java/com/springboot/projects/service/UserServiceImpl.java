@@ -12,8 +12,6 @@ import com.springboot.projects.repository.UserDetailsRepository;
 import com.springboot.projects.utility.EmailUtils;
 import com.springboot.projects.utility.PasswordUtils;
 
-import ch.qos.logback.core.joran.util.beans.BeanUtil;
-
 @Service
 public class UserServiceImpl implements UserService {
 	@Autowired
@@ -23,11 +21,22 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public String login(LoginForm form) {
-		return null;
+		UserDetails entity = userDetailsRepository.findByEmailAndPassword(form.getEmail(), form.getPswd());
+		if (entity == null) {
+			return "Invalid Credentials";
+		}
+		if (entity.getAccountStatus().equals("LOCKED")) {
+			return "Your account is Locked";
+		}
+		return "success";
 	}
 
 	@Override
 	public boolean signup(SignUpForm form) throws Exception {
+		UserDetails user = userDetailsRepository.findByEmail(form.getEmail());
+		if (user != null) {
+			return false;
+		}
 		// copy data from binding object to endtity object
 		UserDetails entity = new UserDetails();
 		BeanUtils.copyProperties(form, entity);
@@ -43,18 +52,32 @@ public class UserServiceImpl implements UserService {
 				+ "<br/>" + "<a href=\"http://localhost:8080/unlock?email=" + recipient
 				+ "\">Click Here to Unlock Account</a>";
 		emailUtils.sendEmail(recipient, subject, emailBody);
-
 		return true;
 	}
 
 	@Override
-	public String unlockaccount(UnlockForm form) {
-		return null;
+	public boolean unlockaccount(UnlockForm form) {
+		UserDetails entity = userDetailsRepository.findByEmail(form.getEmail());
+		if (entity.getPassword().equals(form.getTempPswd())) {
+			entity.setPassword(form.getNewPswd());
+			entity.setAccountStatus("UNLOCKED");
+			userDetailsRepository.save(entity);
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	@Override
-	public String forgotpswd(String email) {
-		return null;
+	public boolean forgotpswd(String email) throws Exception {
+		UserDetails entity = userDetailsRepository.findByEmail(email);
+		if (entity == null) {
+			return false;
+		}
+		String subject = "Recover Password";
+		String body = "Your Pswd :" + entity.getPassword();
+		emailUtils.sendEmail(email, subject, body);
+		return true;
 	}
 
 }

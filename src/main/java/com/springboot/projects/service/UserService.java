@@ -9,8 +9,8 @@ public interface UserService {
 
 	public boolean signup(SignUpForm form) throws Exception ;
 
-	public String unlockaccount(UnlockForm form);
+	public boolean unlockaccount(UnlockForm form);
 
-	public String forgotpswd(String email);
+	public boolean forgotpswd(String email) throws Exception;
 
 }
