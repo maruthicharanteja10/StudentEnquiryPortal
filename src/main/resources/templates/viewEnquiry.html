@@ -6,7 +6,7 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <meta http-equiv="x-ua-compatible" content="ie=edge" />
-<title>Ashok IT - View Enquries</title>
+<title>Ashok IT - View Enquiries</title>
 <!-- MDB icon -->
 <link rel="icon" href="img/mdb-favicon.ico" type="image/x-icon" />
 <!-- Font Awesome -->
@@ -20,39 +20,43 @@
 <script src="/webjars/jquery/3.6.4/jquery.min.js"></script>
 <script>
 	$(document).ready(function() {
-		$(".form-select").on("change", function(e) {
+		$(".form-select").on("change", function() {
+			// Capture selected values
 			var cname = $("#cname").val();
-			alert("Cname" + cname);
 			var status = $("#status").val();
-			alert("Status" + status);
 			var mode = $("#mode").val();
-			alert("mode" + mode);
-			<!--$.ajax({  
+
+			// Debug: Display selected values
+			console.log("Cname:", cname, "Status:", status, "Mode:", mode);
+
+			// AJAX call to fetch filtered enquiries
+			$.ajax({
 				type : "GET",
 				url : "filterEnquiries",
 				data : {
-					cname : $("#cname").val(),
-					status : $("#status").val(),
-					mode : $("#mode").val()
+					cname : cname,
+					status : status,
+					mode : mode
 				},
 				success : function(result) {
+					// Hide the original table and populate filter result
 					$("#enqTable").hide();
-					$("#filterResultTable").html(result);
-				}
-
+					$("#filterResultTable").html(result).show();
+				},
+				error : function(xhr, status, error) {
+					console.error("AJAX Error:", status, error);
+				},
 			});
-			-->
 		});
 	});
 </script>
 </head>
 
 <body>
-
 	<nav class="navbar navbar-expand-lg bg-body-tertiary">
 		<div class="container-fluid">
 			<a class="navbar-brand" href="#"> <img alt="ashokit"
-				src="images/AshokIT-Logo.jpg" width=100%>
+				src="images/AshokIT-Logo.jpg" width="100%" />
 			</a>
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -67,9 +71,8 @@
 			</div>
 		</div>
 	</nav>
-	<!-- Start your project here-->
 
-
+	<!-- Start your project here -->
 	<section class="h-100 gradient-form" style="background-color: #eee;">
 		<div class="container py-5 h-100">
 			<div
@@ -79,45 +82,42 @@
 						<div class="row g-0">
 							<div class="col-lg-12">
 								<div class="card-body p-md-5 mx-md-4">
-
 									<div class="text-center">
 										<h4 class="mt-1 mb-5 pb-1">View Student Enquiries</h4>
 									</div>
 
+									<!-- Filters -->
 									<div class="row">
 										<div class="col-md-4 form-outline mb-4">
-											<label class="form-label" for="form2Example22">Course
-											</label> <select id="cname" class="form-select">
-												<option>-Select-</option>
+											<label class="form-label">Course</label> <select id="cname"
+												class="form-select">
+												<option value="">-Select-</option>
 												<option th:each="course:${courseNames}" th:value="${course}"
 													th:text="${course}"></option>
 											</select>
 										</div>
-
 										<div class="col-md-4 form-outline mb-4">
-											<label class="form-label" for="form2Example22">Enquiry
-												Status</label> <select id="status" class="form-select">
-												<option>-Select-</option>
+											<label class="form-label">Enquiry Status</label> <select
+												id="status" class="form-select">
+												<option value="">-Select-</option>
 												<option th:each="status:${enqstatusNames}"
 													th:value="${status}" th:text="${status}"></option>
 											</select>
 										</div>
-
-
-										<div class="col-md-4 form-outline mb-4 ">
-											<label class="form-label" for="form2Example22">Class
-												Mode </label> <select id="mode" class="form-select">
-												<option>-Select-</option>
-												<option>Online</option>
-												<option>Classroom</option>
+										<div class="col-md-4 form-outline mb-4">
+											<label class="form-label">Class Mode</label> <select
+												id="mode" class="form-select">
+												<option value="">-Select-</option>
+												<option value="Online">Online</option>
+												<option value="Classroom">Classroom</option>
 											</select>
 										</div>
-
 									</div>
 
-									<div id="filterResultTable"></div>
+									<!-- Filter Results -->
+									<div id="filterResultTable" style="display: none;"></div>
 
-
+									<!-- Default Table -->
 									<table class="table table-striped table-bordered table-hover"
 										id="enqTable">
 										<thead>
@@ -131,7 +131,7 @@
 												<th scope="col">Action</th>
 											</tr>
 										</thead>
-										<tbody id="table-body">
+										<tbody>
 											<tr th:each="enq:${enquiries}">
 												<td th:text="${enqStat.index}+1"></td>
 												<td th:text="${enq.studentName}"></td>
@@ -139,11 +139,11 @@
 												<td th:text="${enq.studentPhno}"></td>
 												<td th:text="${enq.updatedDate}"></td>
 												<td th:text="${enq.enquiryStatus}"></td>
-												<td><a th:href="@{/addEnquiry}" class="btn btn-primary">Edit</a></td>
+												<td><a th:href="@{/addEnquiry}" class="btn btn-primary">Edit</a>
+												</td>
 											</tr>
 										</tbody>
 									</table>
-
 								</div>
 							</div>
 						</div>
@@ -152,12 +152,9 @@
 			</div>
 		</div>
 	</section>
-	<!-- End your project here-->
+	<!-- End your project here -->
 
-	<!-- MDB -->
 	<script type="text/javascript" src="js/mdb.min.js"></script>
-	<!-- Custom scripts -->
-	<script type="text/javascript"></script>
 </body>
 
 </html>
