@@ -12,12 +12,21 @@ import com.springboot.projects.repository.UserDetailsRepository;
 import com.springboot.projects.utility.EmailUtils;
 import com.springboot.projects.utility.PasswordUtils;
 
+import jakarta.servlet.http.HttpSession;
+
 @Service
 public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserDetailsRepository userDetailsRepository;
 	@Autowired
 	private EmailUtils emailUtils;
+	@Autowired
+	private HttpSession session;
+
+	public UserServiceImpl(UserDetailsRepository userDetailsRepository) {
+		super();
+		this.userDetailsRepository = userDetailsRepository;
+	}
 
 	@Override
 	public String login(LoginForm form) {
@@ -28,6 +37,8 @@ public class UserServiceImpl implements UserService {
 		if (entity.getAccountStatus().equals("LOCKED")) {
 			return "Your account is Locked";
 		}
+		// create session and store user data in session
+		session.setAttribute("userId", entity.getUserId());
 		return "success";
 	}
 

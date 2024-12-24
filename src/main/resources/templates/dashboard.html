@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
 <meta charset="UTF-8" />
@@ -31,12 +31,12 @@
 				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 					<li class="nav-item"><a class="nav-link active"
 						aria-current="page" href="dashboard">Home</a></li>
-					<li class="nav-item"><a class="nav-link" href="enquiry">Add
-							Enquiry</a></li>
-					<li class="nav-item"><a class="nav-link" href="enquires">View
-							Enquiries</a></li>
+					<li class="nav-item"><a class="nav-link"
+						th:href="@{/addenquiry}">Add Enquiry</a></li>
+					<li class="nav-item"><a class="nav-link"
+						th:href="@{/viewenquiry}">View Enquiries</a></li>
 				</ul>
-				<a href="/" class="btn btn-danger">Logout</a>
+				<a href="logout" class="btn btn-danger">Logout</a>
 			</div>
 		</div>
 	</nav>
@@ -57,14 +57,28 @@
 										<h4 class="mt-1 mb-5 pb-1">Your Performance</h4>
 									</div>
 
-									<h2>Total Enquiries : 256 </h2>
-									<h2 class="text-success">Enrolled : 84 </h2>
-									<h2 class="text-danger">Lost : 172</h2>
+									<h3>
+										Total Enquiries :
+										<p th:text="${dashboarddata.totalEnquiryCnt}" />
+									</h3>
+
+
+									<h3 class="text-success">
+										Enrolled :
+										<p th:text="${dashboarddata.enrolledCnt}" />
+									</h3>
+
+									<h2 class="text-danger">
+										Lost :
+										<p th:text="${dashboarddata.lostCnt}"></p>
+									</h2>
+
+
 
 								</div>
 							</div>
 							<div class="col-lg-6 d-flex align-items-center gradient-custom-2">
-								<img alt="" src="images/lady.jpg" width="50%"  height="90%">
+								<img alt="" src="images/lady.jpg" width="50%" height="90%">
 							</div>
 						</div>
 					</div>

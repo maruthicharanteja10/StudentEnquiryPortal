@@ -22,7 +22,7 @@ public class UserDetails {
 	private Long phoneno;
 	private String password;
 	private String accountStatus;
-//	@OneToMany(mappedBy = "user_id", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-//	private List<StudentEnquiry> enquiries;
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private List<StudentEnquiry> enquiries;
 
 }
