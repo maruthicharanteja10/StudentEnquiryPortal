@@ -109,7 +109,7 @@
 												id="mode" class="form-select">
 												<option value="">-Select-</option>
 												<option value="Online">Online</option>
-												<option value="Classroom">Classroom</option>
+												<option value="ClassRoom">ClassRoom</option>
 											</select>
 										</div>
 									</div>
@@ -128,6 +128,7 @@
 												<th scope="col">Number</th>
 												<th scope="col">Enquiry Date</th>
 												<th scope="col">Status</th>
+												<th scope="col">Mode</th>
 												<th scope="col">Action</th>
 											</tr>
 										</thead>
@@ -139,8 +140,9 @@
 												<td th:text="${enq.studentPhno}"></td>
 												<td th:text="${enq.updatedDate}"></td>
 												<td th:text="${enq.enquiryStatus}"></td>
-												<td><a th:href="@{/addEnquiry}" class="btn btn-primary">Edit</a>
-												</td>
+												<td th:text="${enq.classMode}"></td>
+												<td><a th:href="@{/editenquiry/{id}(id=${enq.EnquiryId})}" class="btn btn-primary">Edit</a></td>
+
 											</tr>
 										</tbody>
 									</table>

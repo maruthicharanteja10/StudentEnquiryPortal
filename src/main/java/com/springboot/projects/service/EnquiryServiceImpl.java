@@ -96,6 +96,41 @@ public class EnquiryServiceImpl implements EnquiryService {
 	}
 
 	@Override
+	public List<StudentEnquiry> getEnquiriesByUser(Integer userId) {
+		Optional<UserDetails> user = userDetailsRepository.findById(userId);
+		return user.map(UserDetails::getEnquiries).orElseThrow(() -> new RuntimeException("User not found"));
+	}
+
+	// Add a new enquiry
+	 @Override
+	    public StudentEnquiry getEnquiryById(Integer enquiryId) {
+	        return studentEnquiryRepository.findById(enquiryId).orElse(null);
+	    }
+
+	  
+	    @Override
+	    public boolean updateEnquiry(Integer enquiryId, EnquiryForm enquiryForm) {
+	        Optional<StudentEnquiry> optionalEnquiry = studentEnquiryRepository.findById(enquiryId);
+
+	        if (optionalEnquiry.isEmpty()) {
+	            return false; // Enquiry not found
+	        }
+
+	        StudentEnquiry enquiry = optionalEnquiry.get();
+
+	        // Update fields
+	        enquiry.setStudentName(enquiryForm.getStudentName());
+	        enquiry.setStudentPhno(enquiryForm.getStudentPhno());
+	        enquiry.setClassMode(enquiryForm.getClassMode());
+	        enquiry.setCourseName(enquiryForm.getCourseName());
+	        enquiry.setEnquiryStatus(enquiryForm.getEnquiryStatus());
+	        enquiry.setUpdatedDate(LocalDate.now());
+
+	        studentEnquiryRepository.save(enquiry);
+	        return true;
+	    }
+
+	@Override
 	public List<StudentEnquiry> getEnquiries() {
 		Integer userId = (Integer) session.getAttribute("userId");
 		Optional<UserDetails> findById = userDetailsRepository.findById(userId);
@@ -131,5 +166,7 @@ public class EnquiryServiceImpl implements EnquiryService {
 		}
 		return null;
 	}
+
+
 
 }
