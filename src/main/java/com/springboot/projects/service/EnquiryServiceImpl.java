@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.springboot.projects.binding.DashboardResponse;
 import com.springboot.projects.binding.EnquiryForm;
 import com.springboot.projects.binding.EnquirySearchCriteria;
+import com.springboot.projects.constants.AppConstants;
 import com.springboot.projects.entity.Course;
 import com.springboot.projects.entity.EnquiryStatus;
 import com.springboot.projects.entity.StudentEnquiry;
@@ -50,9 +51,9 @@ public class EnquiryServiceImpl implements EnquiryService {
 			UserDetails userEntity = findbyId.get();
 			List<StudentEnquiry> enquiries = userEntity.getEnquiries();
 			Integer totalCnt = enquiries.size();
-			Integer enrolledCnt = enquiries.stream().filter(e -> e.getEnquiryStatus().equals("Enrolled"))
+			Integer enrolledCnt = enquiries.stream().filter(e -> e.getEnquiryStatus().equals(AppConstants.STR_ENROLLED))
 					.collect(Collectors.toList()).size();
-			Integer lostCnt = enquiries.stream().filter(e -> e.getEnquiryStatus().equals("Lost"))
+			Integer lostCnt = enquiries.stream().filter(e -> e.getEnquiryStatus().equals(AppConstants.STR_LOST))
 					.collect(Collectors.toList()).size();
 			response.setEnrolledCnt(enrolledCnt);
 			response.setTotalEnquiryCnt(totalCnt);
@@ -85,7 +86,7 @@ public class EnquiryServiceImpl implements EnquiryService {
 	public boolean saveEnquiry(EnquiryForm form) {
 		StudentEnquiry enqEntity = new StudentEnquiry();
 		BeanUtils.copyProperties(form, enqEntity);
-		Integer userId = (Integer) session.getAttribute("userId");
+		Integer userId = (Integer) session.getAttribute(AppConstants.STR_USER_ID);
 		UserDetails userEntity = userDetailsRepository.findById(userId).get();
 		enqEntity.setUser(userEntity);
 		enqEntity.setCreatedDate(LocalDate.now());
@@ -98,7 +99,7 @@ public class EnquiryServiceImpl implements EnquiryService {
 	@Override
 	public List<StudentEnquiry> getEnquiriesByUser(Integer userId) {
 		Optional<UserDetails> user = userDetailsRepository.findById(userId);
-		return user.map(UserDetails::getEnquiries).orElseThrow(() -> new RuntimeException("User not found"));
+		return user.map(UserDetails::getEnquiries).orElseThrow(() -> new RuntimeException(AppConstants.STR_USER_NOT_FOUND));
 	}
 
 	// Add a new enquiry
@@ -132,7 +133,7 @@ public class EnquiryServiceImpl implements EnquiryService {
 
 	@Override
 	public List<StudentEnquiry> getEnquiries() {
-		Integer userId = (Integer) session.getAttribute("userId");
+		Integer userId = (Integer) session.getAttribute(AppConstants.STR_USER_ID);
 		Optional<UserDetails> findById = userDetailsRepository.findById(userId);
 		if (findById.isPresent()) {
 			UserDetails userDetEntity = findById.get();

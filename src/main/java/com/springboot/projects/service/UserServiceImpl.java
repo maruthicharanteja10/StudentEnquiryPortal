@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.springboot.projects.binding.LoginForm;
 import com.springboot.projects.binding.SignUpForm;
 import com.springboot.projects.binding.UnlockForm;
+import com.springboot.projects.constants.AppConstants;
 import com.springboot.projects.entity.UserDetails;
 import com.springboot.projects.repository.UserDetailsRepository;
 import com.springboot.projects.utility.EmailUtils;
@@ -32,14 +33,14 @@ public class UserServiceImpl implements UserService {
 	public String login(LoginForm form) {
 		UserDetails entity = userDetailsRepository.findByEmailAndPassword(form.getEmail(), form.getPswd());
 		if (entity == null) {
-			return "Invalid Credentials";
+			return AppConstants.INVALID_CREDINTIALS_MSG;
 		}
-		if (entity.getAccountStatus().equals("LOCKED")) {
-			return "Your account is Locked";
+		if (entity.getAccountStatus().equals(AppConstants.STR_LOCKED)) {
+			return AppConstants.STR_ACC_LOCKED_MSG;
 		}
 		// create session and store user data in session
-		session.setAttribute("userId", entity.getUserId());
-		return "success";
+		session.setAttribute(AppConstants.STR_USER_ID, entity.getUserId());
+		return AppConstants.STR_SUCCESS;
 	}
 
 	@Override
@@ -54,7 +55,7 @@ public class UserServiceImpl implements UserService {
 		// To generate random password
 		String tempPswd = PasswordUtils.generateRandomPswd();
 		entity.setPassword(tempPswd);
-		entity.setAccountStatus("LOCKED");
+		entity.setAccountStatus(AppConstants.STR_LOCKED);
 		userDetailsRepository.save(entity);
 //To send Email
 		String recipient = form.getEmail();
@@ -71,7 +72,7 @@ public class UserServiceImpl implements UserService {
 		UserDetails entity = userDetailsRepository.findByEmail(form.getEmail());
 		if (entity.getPassword().equals(form.getTempPswd())) {
 			entity.setPassword(form.getNewPswd());
-			entity.setAccountStatus("UNLOCKED");
+			entity.setAccountStatus(AppConstants.STR_UNLOCKED);
 			userDetailsRepository.save(entity);
 			return true;
 		} else {
